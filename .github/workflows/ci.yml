@@ -1,38 +1,24 @@
+- name: Checkout code
+  uses: actions/checkout@v3
 
-name: CI
+- name: Set up Python
+  uses: actions/setup-python@v4
+  with:
+    python-version: '3.11'
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+- name: Install dependencies
+  run: pip install -r requirements.txt
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+- name: Run process_logs.py
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  run: python scripts/process_logs.py
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+- name: Run tests
+  run: pytest || true
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run process_logs.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/process_logs.py
-
-      - name: Run tests
-        run: pytest || true
-
-      - name: Upload CSV
-        uses: actions/upload-artifact@v4
-        with:
-          name: build_data
-          path: data/build_data.csv
+- name: Upload CSV
+  uses: actions/upload-artifact@v4
+  with:
+    name: build_data
+    path: data/build_data.csv

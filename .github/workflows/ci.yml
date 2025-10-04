@@ -23,21 +23,25 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run process_logs.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/process_logs.py
 
-      - name: Run tests
-        run: pytest || true
+      - name: Train ML model
+        run: python scripts/train_model.py
 
-      - name: Upload CSV
+      - name: List data folder (debug)
+        run: ls -R data
+
+      - name: List models folder (debug)
+        run: ls -R models
+
+      - name: Upload CSV artifact
         uses: actions/upload-artifact@v4
         with:
           name: build_data
           path: data/build_data.csv
-          
-      - name: Upload trained model
+
+      - name: Upload trained model artifact
         uses: actions/upload-artifact@v4
         with:
-         name: trained_model
-         path: models/model.pkl
+          name: trained_model
+          path: models/model.pkl

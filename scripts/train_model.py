@@ -37,7 +37,6 @@ print(f"✅ Model trained! Accuracy on test set: {accuracy*100:.2f}%")
 # -------------------------------
 # 5️⃣ Save model
 # -------------------------------
-os.makedirs("models", exist_ok=True)
-joblib.dump(clf, "models/model.pkl")
+os.makedirs("models", exist_ok=True)            # create folder if it doesn't exist
+joblib.dump(clf, "models/model.pkl")           # save model
 print("✅ Model saved as models/model.pkl")
-

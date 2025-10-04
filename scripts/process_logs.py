@@ -57,6 +57,12 @@ for run in workflow_runs:
 # 6️⃣ Save CSV
 # -------------------------------
 df = pd.DataFrame(data, columns=["commit_msg_length", "num_changed_files", "keyword_count", "prev_status", "build_status"])
+
+# Safe creation of data folder
+if os.path.exists("data") and not os.path.isdir("data"):
+    os.remove("data")  # remove file if exists
 os.makedirs("data", exist_ok=True)
+
 df.to_csv("data/build_data.csv", index=False)
 print("✅ Build logs processed and saved to data/build_data.csv")
+

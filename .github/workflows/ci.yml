@@ -22,6 +22,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # ---------- NEW STEP ----------
+      - name: Run process_logs.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/process_logs.py
+
+      # You can keep your tests if you want
       - name: Run tests
         run: pytest || true
 
+      # ---------- OPTIONAL: upload CSV ----------
+      - name: Upload CSV
+        uses: actions/upload-artifact@v3
+        with:
+          name: build_data
+          path: data/build_data.csv

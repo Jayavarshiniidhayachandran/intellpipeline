@@ -2,46 +2,58 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # 4️⃣ Run process_logs.py
       - name: Run process_logs.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/process_logs.py
 
+      # 5️⃣ Train ML model
       - name: Train ML model
         run: python scripts/train_model.py
 
-      - name: List data folder (debug)
+      # 6️⃣ Debug folders (optional)
+      - name: List data folder
         run: ls -R data
-
-      - name: List models folder (debug)
+      - name: List models folder
         run: ls -R models
 
+      # 7️⃣ Upload CSV artifact
       - name: Upload CSV artifact
         uses: actions/upload-artifact@v4
         with:
           name: build_data
           path: data/build_data.csv
 
+      # 8️⃣ Upload trained model artifact
       - name: Upload trained model artifact
         uses: actions/upload-artifact@v4
         with:
           name: trained_model
           path: models/model.pkl
+

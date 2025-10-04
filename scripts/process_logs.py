@@ -66,3 +66,26 @@ os.makedirs("data", exist_ok=True)
 df.to_csv("data/build_data.csv", index=False)
 print("✅ Build logs processed and saved to data/build_data.csv")
 
+
+# scripts/process_logs.py
+import os
+import pandas as pd
+
+# Create data folder
+os.makedirs("data", exist_ok=True)
+
+# Example: generate fake build logs data
+data = {
+    "commit_msg_length": [50, 10, 80],
+    "num_changed_files": [3, 1, 5],
+    "keyword_count": [1, 0, 2],
+    "prev_status": [1, 0, 1],
+    "build_status": [1, 0, 1]  # 1 = success, 0 = fail
+}
+
+df = pd.DataFrame(data)
+
+# Save CSV
+df.to_csv("data/build_data.csv", index=False)
+print("✅ Build logs processed and saved to data/build_data.csv")
+

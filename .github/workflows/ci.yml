@@ -35,4 +35,7 @@ jobs:
         with:
           name: build_data
           path: data/build_data.csv
+          
+      - name: Train ML model
+        run: python scripts/train_model.py
 
